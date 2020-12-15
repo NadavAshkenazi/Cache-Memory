@@ -3,4 +3,4 @@ project(ca_hw2)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(ca_hw2 main.cpp)
+add_executable(ca_hw2 main.cpp cache.cpp)

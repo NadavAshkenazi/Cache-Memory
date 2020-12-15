@@ -1,1 +1,1 @@
-/usr/bin/c++  -g   CMakeFiles/ca_hw2.dir/main.cpp.o  -o ca_hw2 
+/usr/bin/c++  -g   CMakeFiles/ca_hw2.dir/main.cpp.o CMakeFiles/ca_hw2.dir/cache.cpp.o  -o ca_hw2 
