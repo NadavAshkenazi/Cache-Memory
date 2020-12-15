@@ -82,10 +82,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cache.cpp">
-			<Option target="ca_hw2"/>
-		</Unit>
-		<Unit filename="/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/main.cpp">
+		<Unit filename="/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cacheSim.cpp">
 			<Option target="ca_hw2"/>
 		</Unit>
 		<Unit filename="/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/CMakeLists.txt">

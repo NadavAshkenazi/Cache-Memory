@@ -123,59 +123,32 @@ ca_hw2/fast:
 	$(MAKE) -f CMakeFiles/ca_hw2.dir/build.make CMakeFiles/ca_hw2.dir/build
 .PHONY : ca_hw2/fast
 
-cache.o: cache.cpp.o
+cacheSim.o: cacheSim.cpp.o
 
-.PHONY : cache.o
-
-# target to build an object file
-cache.cpp.o:
-	$(MAKE) -f CMakeFiles/ca_hw2.dir/build.make CMakeFiles/ca_hw2.dir/cache.cpp.o
-.PHONY : cache.cpp.o
-
-cache.i: cache.cpp.i
-
-.PHONY : cache.i
-
-# target to preprocess a source file
-cache.cpp.i:
-	$(MAKE) -f CMakeFiles/ca_hw2.dir/build.make CMakeFiles/ca_hw2.dir/cache.cpp.i
-.PHONY : cache.cpp.i
-
-cache.s: cache.cpp.s
-
-.PHONY : cache.s
-
-# target to generate assembly for a file
-cache.cpp.s:
-	$(MAKE) -f CMakeFiles/ca_hw2.dir/build.make CMakeFiles/ca_hw2.dir/cache.cpp.s
-.PHONY : cache.cpp.s
-
-main.o: main.cpp.o
-
-.PHONY : main.o
+.PHONY : cacheSim.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/ca_hw2.dir/build.make CMakeFiles/ca_hw2.dir/main.cpp.o
-.PHONY : main.cpp.o
+cacheSim.cpp.o:
+	$(MAKE) -f CMakeFiles/ca_hw2.dir/build.make CMakeFiles/ca_hw2.dir/cacheSim.cpp.o
+.PHONY : cacheSim.cpp.o
 
-main.i: main.cpp.i
+cacheSim.i: cacheSim.cpp.i
 
-.PHONY : main.i
+.PHONY : cacheSim.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/ca_hw2.dir/build.make CMakeFiles/ca_hw2.dir/main.cpp.i
-.PHONY : main.cpp.i
+cacheSim.cpp.i:
+	$(MAKE) -f CMakeFiles/ca_hw2.dir/build.make CMakeFiles/ca_hw2.dir/cacheSim.cpp.i
+.PHONY : cacheSim.cpp.i
 
-main.s: main.cpp.s
+cacheSim.s: cacheSim.cpp.s
 
-.PHONY : main.s
+.PHONY : cacheSim.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/ca_hw2.dir/build.make CMakeFiles/ca_hw2.dir/main.cpp.s
-.PHONY : main.cpp.s
+cacheSim.cpp.s:
+	$(MAKE) -f CMakeFiles/ca_hw2.dir/build.make CMakeFiles/ca_hw2.dir/cacheSim.cpp.s
+.PHONY : cacheSim.cpp.s
 
 # Help Target
 help:
@@ -186,12 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... ca_hw2"
-	@echo "... cache.o"
-	@echo "... cache.i"
-	@echo "... cache.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... cacheSim.o"
+	@echo "... cacheSim.i"
+	@echo "... cacheSim.s"
 .PHONY : help
 
 

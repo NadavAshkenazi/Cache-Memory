@@ -4,8 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cache.cpp" "/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cmake-build-debug/CMakeFiles/ca_hw2.dir/cache.cpp.o"
-  "/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/main.cpp" "/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cmake-build-debug/CMakeFiles/ca_hw2.dir/main.cpp.o"
+  "/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cacheSim.cpp" "/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cmake-build-debug/CMakeFiles/ca_hw2.dir/cacheSim.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

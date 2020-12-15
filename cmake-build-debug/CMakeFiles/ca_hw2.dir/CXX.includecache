@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/Cache.cpp
+map
+-
+math.h
+-
+vector
+-
+string
+-
+map
+-
+stdio.h
+-
+iostream
+-
+list
+/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/list
+
+/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cacheSim.cpp
+cstdlib
+-
+iostream
+-
+fstream
+-
+sstream
+-
+Cache.cpp
+/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/Cache.cpp
+

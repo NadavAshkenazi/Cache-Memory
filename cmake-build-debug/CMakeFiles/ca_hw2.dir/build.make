@@ -57,45 +57,30 @@ include CMakeFiles/ca_hw2.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/ca_hw2.dir/flags.make
 
-CMakeFiles/ca_hw2.dir/main.cpp.o: CMakeFiles/ca_hw2.dir/flags.make
-CMakeFiles/ca_hw2.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ca_hw2.dir/main.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ca_hw2.dir/main.cpp.o -c "/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/main.cpp"
+CMakeFiles/ca_hw2.dir/cacheSim.cpp.o: CMakeFiles/ca_hw2.dir/flags.make
+CMakeFiles/ca_hw2.dir/cacheSim.cpp.o: ../cacheSim.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ca_hw2.dir/cacheSim.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ca_hw2.dir/cacheSim.cpp.o -c "/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cacheSim.cpp"
 
-CMakeFiles/ca_hw2.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ca_hw2.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/main.cpp" > CMakeFiles/ca_hw2.dir/main.cpp.i
+CMakeFiles/ca_hw2.dir/cacheSim.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ca_hw2.dir/cacheSim.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cacheSim.cpp" > CMakeFiles/ca_hw2.dir/cacheSim.cpp.i
 
-CMakeFiles/ca_hw2.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ca_hw2.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/main.cpp" -o CMakeFiles/ca_hw2.dir/main.cpp.s
-
-CMakeFiles/ca_hw2.dir/cache.cpp.o: CMakeFiles/ca_hw2.dir/flags.make
-CMakeFiles/ca_hw2.dir/cache.cpp.o: ../cache.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ca_hw2.dir/cache.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ca_hw2.dir/cache.cpp.o -c "/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cache.cpp"
-
-CMakeFiles/ca_hw2.dir/cache.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ca_hw2.dir/cache.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cache.cpp" > CMakeFiles/ca_hw2.dir/cache.cpp.i
-
-CMakeFiles/ca_hw2.dir/cache.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ca_hw2.dir/cache.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cache.cpp" -o CMakeFiles/ca_hw2.dir/cache.cpp.s
+CMakeFiles/ca_hw2.dir/cacheSim.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ca_hw2.dir/cacheSim.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cacheSim.cpp" -o CMakeFiles/ca_hw2.dir/cacheSim.cpp.s
 
 # Object files for target ca_hw2
 ca_hw2_OBJECTS = \
-"CMakeFiles/ca_hw2.dir/main.cpp.o" \
-"CMakeFiles/ca_hw2.dir/cache.cpp.o"
+"CMakeFiles/ca_hw2.dir/cacheSim.cpp.o"
 
 # External object files for target ca_hw2
 ca_hw2_EXTERNAL_OBJECTS =
 
-ca_hw2: CMakeFiles/ca_hw2.dir/main.cpp.o
-ca_hw2: CMakeFiles/ca_hw2.dir/cache.cpp.o
+ca_hw2: CMakeFiles/ca_hw2.dir/cacheSim.cpp.o
 ca_hw2: CMakeFiles/ca_hw2.dir/build.make
 ca_hw2: CMakeFiles/ca_hw2.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable ca_hw2"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable ca_hw2"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ca_hw2.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

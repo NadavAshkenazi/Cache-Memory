@@ -16,63 +16,182 @@ using namespace std;
 enum HIERARCHY {L1, L2, MEM};
 enum OPERATION {READ, WRITE};
 
+unsigned int getTag(uint32_t address, int waysNum, int bSize){
+    uint32_t mask = 0;
+    for (int i = 0; i < log2(waysNum) + log2(bSize); i++){
+        mask += 1;
+        mask = mask << 1;
+    }
+    return address & (~mask);
+}
+
+
+unsigned int getSet(uint32_t address, int waysNum, int bSize){
+    uint32_t mask = 0;
+    for (int i = 0; i < log2(waysNum); i++){
+        mask += 1;
+        mask = mask << 1;
+    }
+    for (int i = 0; i < log2(bSize); i++){
+        mask = mask << 1;
+    }
+    return address & mask;
+}
+
+unsigned int getOffset(uint32_t address, int waysNum, int bSize){
+    uint32_t mask = 0;
+
+    for (int i = 0; i < log2(bSize); i++){
+        mask += 1;
+        mask = mask << 1;
+    }
+    return address & mask;
+}
+
 
 class Entry{
 public:
-    const int address;
-    const int tag;
-    const int set;
+    const uint32_t address;
+    const unsigned int wayIndex;
     bool dirtyBit;
     bool validBit;
-    const unsigned int wayIndex;
+    Entry(uint32_t address, int wayIndex, bool dirtyBit = 0, bool validBit =1) : address(address),
+                                                                                              wayIndex(wayIndex),
+                                                                                              dirtyBit(dirtyBit),
+                                                                                              validBit(validBit){}
 };
+
+
+
+
 
 class CacheHierarchy{
 public:
     const unsigned int lSize;
     const unsigned int lAssoc;
     const unsigned int lCyc;
+    const unsigned int bSize;
     map<int,list<Entry>> L;
-    CacheHierarchy(unsigned int lSize = 0, unsigned int lAssoc =0, unsigned int lCyc = 0) :    lSize(lSize),
+    CacheHierarchy(unsigned int lSize = 0, unsigned int lAssoc =0, unsigned int lCyc = 0, unsigned int bSize =0) :
+                                                                                    lSize(lSize),
                                                                                     lAssoc(lAssoc),
-                                                                                    lCyc(lCyc){
+                                                                                    lCyc(lCyc),
+                                                                                    bSize(bSize){
         this->L = map<int,list<Entry>>();
     }
-    bool snoop(int address);
-    void updateByLRU(int address);
-    void add(int address);
-    Entry remove(int address;
-    bool isFull();
-    Entry removeLast();
-    void updateDirty(int address, bool isDirty);
+    bool snoop(uint32_t address);
+    void add(uint32_t address);
+    void updateByLRU(uint32_t address);
+    Entry* remove(uint32_t address);
+    Entry* removeLast(uint32_t address);
+    bool isSetFull(uint32_t address);
+    void updateDirty(uint32_t address, bool isDirty);
 };
+
+bool CacheHierarchy::snoop(uint32_t address){
+
+    list<Entry> temp = L[getSet(address,lAssoc, bSize)];
+    std::list<Entry>::iterator it;
+    for (it = temp.begin(); it != temp.end(); ++it){
+        if (getTag(address,lAssoc,bSize) == getTag(it->address,lAssoc,bSize))
+            return true;
+    }
+    return false;
+}
+
+void CacheHierarchy::add(uint32_t address){
+    Entry entry = Entry(address, lAssoc);
+    L[getSet(address,lAssoc, bSize)].push_front(entry);
+}
+
+
+void CacheHierarchy::updateByLRU(uint32_t address){
+    list<Entry>* temp = &L[getSet(address,lAssoc, bSize)];
+    std::list<Entry>::iterator it;
+    for (it = temp->begin(); it != temp->end(); ++it){
+        if (getTag(address,lAssoc,bSize) == getTag(it->address,lAssoc,bSize)){
+            Entry entry = Entry(*it);
+            temp->erase(it);
+            temp->push_front(entry);
+        }
+    }
+}
+
+Entry* CacheHierarchy::remove(uint32_t address){
+    list<Entry>* temp = &L[getSet(address,lAssoc, bSize)];
+    std::list<Entry>::iterator it;
+    for (it = temp->begin(); it != temp->end(); ++it){
+        if (getTag(address,lAssoc,bSize) == getTag(it->address,lAssoc,bSize)){
+            Entry* entry = new Entry(*it);
+            temp->erase(it);
+            return entry;
+        }
+    }
+    return NULL;
+}
+
+Entry* CacheHierarchy::removeLast(uint32_t address) {
+    list<Entry>* temp = &L[getSet(address,lAssoc, bSize)];
+    std::list<Entry>::iterator lastElement = temp->end();
+    lastElement--;
+    Entry* entry = new Entry(*lastElement);
+    temp->erase(lastElement);
+    return entry;
+}
+
+bool CacheHierarchy::isSetFull(uint32_t address) {
+    if (L[getSet(address,lAssoc, bSize)].size() > lAssoc)
+        throw std::exception();
+    if (L[getSet(address,lAssoc, bSize)].size() == lAssoc)
+        return true;
+    return false;
+}
+
+void CacheHierarchy::updateDirty(uint32_t address, bool isDirty) {
+    list<Entry>* temp = &L[getSet(address,lAssoc, bSize)];
+    std::list<Entry>::iterator it;
+    for (it = temp->begin(); it != temp->end(); ++it){
+        if (getTag(address,lAssoc,bSize) == getTag(it->address,lAssoc,bSize)){
+            it->dirtyBit = isDirty;
+        }
+    }
+}
+
 
 
 class Cache{
-private:
+public:
     int memCyc;
     unsigned int bSize;
     unsigned int wrAllocate;
-    void addToL1(int address, OPERATION op);
-    void addToL2(int address, OPERATION op);
+    unsigned int l1accesses;
+    unsigned int l2accesses;
+    unsigned int l1Misses;
+    unsigned int l2Misses;
+    void addToL1(uint32_t address, OPERATION op);
+    void addToL2(uint32_t address, OPERATION op);
     CacheHierarchy l1;
     CacheHierarchy l2;
-public:
     Cache(int memCyc, unsigned int bSize, unsigned int wrAllocate, unsigned int l1Size, unsigned int l1Assoc,
           unsigned int l1Cyc, unsigned int l2Size, unsigned int l2Assoc, unsigned int l2Cyc) : memCyc(memCyc),
                                                                                             bSize(bSize),
                                                                                             wrAllocate(wrAllocate),
-                                                                                            l1(l1Size, l1Assoc, l1Cyc),
-                                                                                            l2(l2Size, l2Assoc, l2Cyc){}
-    HIERARCHY inCache(int address);
-    void update(int address, OPERATION op);
-    void updateLRUAll(int address){
-        l1.updateByLRU(address);
-        l2.updateByLRU(address);
+                                                                                            l1(l1Size, l1Assoc, l1Cyc, bSize),
+                                                                                            l2(l2Size, l2Assoc, l2Cyc, bSize){}
+    HIERARCHY inCache(uint32_t address);
+    void update(uint32_t address, OPERATION op);
+    double getL1MissRate(){
+        return l1Misses/l1accesses;
+    }
+    double getL2MissRate(){
+        return l2Misses/l2accesses;
+    }
+    double accTimeAVG(){
+        return (((l1accesses * l1.lCyc) + (l1Misses * l2.lCyc) + (l2Misses * memCyc)) / (l1accesses));
     }
 };
 
-HIERARCHY Cache::inCache(int address){
+HIERARCHY Cache::inCache(uint32_t address){
     if (this->l1.snoop(address))
         return L1;
     if (this->l2.snoop(address))
@@ -80,36 +199,52 @@ HIERARCHY Cache::inCache(int address){
     return MEM;
 }
 
-void Cache::update(int address, OPERATION op) {
+void Cache::update(uint32_t address, OPERATION op) {
     HIERARCHY location = this->inCache(address);
     switch (location) {
         case L1:
-            updateLRUAll(address);
+            l1accesses++;
+            l1.updateByLRU(address);
+            l1.updateDirty(address, true);
         case L2:
+            l1accesses++;
+            l1Misses++;
+            l2accesses++;
             if (op == READ || this->wrAllocate) {
                 addToL1(address, op);
-                updateLRUAll(address);
+                l1.updateByLRU(address);
+                l1.updateDirty(address, true);
+                l2.updateByLRU(address);
             }
             else{  // op == WRITE with no Write Allocate
-                l2.updateDirty(address, true);
                 l2.updateByLRU(address);
+                l2.updateDirty(address, true);
             }
 
         case MEM:
+            l1accesses++;
+            l1Misses++;
+            l2accesses++;
+            l2Misses++;
             if (op == READ || this->wrAllocate){
                 addToL2(address, op);
                 addToL1(address, op);
+                l1.updateByLRU(address);
+                l1.updateDirty(address, true);
+                l2.updateByLRU(address);
             }
             else
                 return; //writen only to mem
     }
 }
 
-void Cache::addToL1(int address, OPERATION op){
+void Cache::addToL1(uint32_t address, OPERATION op){
     if (op == READ || wrAllocate){
-        if (l1.isFull()){
-            Entry l1Remove = l1.remove(address);
-            l2.updateDirty(l1Remove.address, true);
+        if (l1.isSetFull(address)){
+            Entry l1Remove = *l1.removeLast(address);
+            if (l1Remove.dirtyBit){
+                l2.updateDirty(l1Remove.address, true);
+            }
         }
         l1.add(address);
         l1.updateByLRU(address);
@@ -118,12 +253,12 @@ void Cache::addToL1(int address, OPERATION op){
         return; //writen only to mem
 }
 
-void Cache::addToL2(int address, OPERATION op){
+void Cache::addToL2(uint32_t address, OPERATION op){
     if (op == READ || wrAllocate){
-        if (l2.isFull()){
-            Entry l2Remove = l2.removeLast();
+        if (l2.isSetFull(address)){
+            Entry l2Remove = *l2.removeLast(address);
             if (l1.snoop(l2Remove.address)){
-                Entry l1Remove = l1.remove(address);
+                Entry l1Remove = *l1.remove(address);
                 // if l1Remove is dirty write its value to mem, else write l2Remove
             }
         }
@@ -131,7 +266,7 @@ void Cache::addToL2(int address, OPERATION op){
         l2.updateByLRU(address);
     }
     else{ // op == WRITE with no Write Allocate
-            return; //writen only to mem
+            return;
 
     }
 }

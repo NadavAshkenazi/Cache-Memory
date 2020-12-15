@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include "Cache.cpp"
 
 using std::FILE;
 using std::string;
@@ -61,7 +62,7 @@ int main(int argc, char **argv) {
 			return 0;
 		}
 	}
-
+    Cache cache = Cache(MemCyc,BSize, WrAlloc, L1Size, L1Assoc, L1Cyc, L2Size, L2Assoc, L2Cyc);
 	while (getline(file, line)) {
 
 		stringstream ss(line);
@@ -73,24 +74,25 @@ int main(int argc, char **argv) {
 			return 0;
 		}
 
-		// DEBUG - remove this line
+		// todo: DEBUG - remove this line
 		cout << "operation: " << operation;
 
 		string cutAddress = address.substr(2); // Removing the "0x" part of the address
 
-		// DEBUG - remove this line
+		// todo: DEBUG - remove this line
 		cout << ", address (hex)" << cutAddress;
 
 		unsigned long int num = 0;
 		num = strtoul(cutAddress.c_str(), NULL, 16);
 
-		// DEBUG - remove this line
+		// todo: DEBUG - remove this line
 		cout << " (dec) " << num << endl;
 
+		cache.update(num, OPERATION(operation));
 	}
 
-	double L1MissRate;
-	double L2MissRate;
+	double L1MissRate = cache.getL1MissRate();
+	double L2MissRate = cache.getL2MissRate();;
 	double avgAccTime;
 
 	printf("L1miss=%.03f ", L1MissRate);

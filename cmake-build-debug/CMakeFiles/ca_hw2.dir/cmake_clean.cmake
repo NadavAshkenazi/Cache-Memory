@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/ca_hw2.dir/cache.cpp.o"
-  "CMakeFiles/ca_hw2.dir/main.cpp.o"
+  "CMakeFiles/ca_hw2.dir/cacheSim.cpp.o"
   "ca_hw2"
   "ca_hw2.pdb"
 )
