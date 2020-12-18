@@ -167,7 +167,7 @@ public:
     unsigned int l1accesses;
     unsigned int l1Misses;
     unsigned int l2Misses;
-    void addToL1(uint32_t address, OPERATION op);
+    uint32_t addToL1(uint32_t address, OPERATION op);
     void addToL2(uint32_t address, OPERATION op);
     CacheHierarchy l1;
     CacheHierarchy l2;
@@ -211,10 +211,14 @@ void Cache::update(uint32_t address, OPERATION op) {
     else if (location == L2){
         l1Misses++;
         if (op == READ || this->wrAllocate) {
-            addToL1(address, op);
+            uint32_t L1Removed = addToL1(address, op);
             l1.updateByLRU(address);
             l1.updateDirty(address, true);
             l2.updateByLRU(address);
+            if (L1Removed != -1 and l2.snoop(L1Removed)){
+                l2.updateDirty(L1Removed, true);
+                l2.updateByLRU(L1Removed);
+            }
         }
         else{  // op == WRITE with no Write Allocate
             l2.updateByLRU(address);
@@ -226,30 +230,37 @@ void Cache::update(uint32_t address, OPERATION op) {
         l2Misses++;
         if (op == READ || this->wrAllocate){
             addToL2(address, op);
-            addToL1(address, op);
+            uint32_t L1Removed = addToL1(address, op);
             l1.updateByLRU(address);
             l1.updateDirty(address, true);
             l2.updateByLRU(address);
+            if (L1Removed != -1 and l2.snoop(L1Removed)){
+                l2.updateDirty(L1Removed, true);
+                l2.updateByLRU(L1Removed);
+            }
         }
         else
             return; //writen only to mem
     }
 }
 
-void Cache::addToL1(uint32_t address, OPERATION op){
+uint32_t Cache::addToL1(uint32_t address, OPERATION op){
+    uint32_t retAdr = -1;
     if (op == READ || wrAllocate){
         if (l1.isSetFull(address)){
             Entry l1Remove = *l1.removeLast(address);
             if (l1Remove.dirtyBit){
                 l2.updateDirty(l1Remove.address, true);
                 l2.updateByLRU(l1Remove.address);
+                retAdr = l1Remove.address;
             }
         }
         l1.add(address);
         l1.updateByLRU(address);
+        return retAdr;
     }
     else // op == WRITE with no Write Allocate
-        return; //writen only to mem
+        return -1; //writen only to mem
 }
 
 void Cache::addToL2(uint32_t address, OPERATION op){
