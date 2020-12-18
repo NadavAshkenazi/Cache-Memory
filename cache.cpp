@@ -215,10 +215,10 @@ void Cache::update(uint32_t address, OPERATION op) {
             l1.updateByLRU(address);
             l1.updateDirty(address, true);
             l2.updateByLRU(address);
-            if (L1Removed != -1 and l2.snoop(L1Removed)){
-                l2.updateDirty(L1Removed, true);
-                l2.updateByLRU(L1Removed);
-            }
+//            if (L1Removed != -1 and l2.snoop(L1Removed)){
+//                l2.updateDirty(L1Removed, true);
+//                l2.updateByLRU(L1Removed);
+//            }
         }
         else{  // op == WRITE with no Write Allocate
             l2.updateByLRU(address);
@@ -234,10 +234,10 @@ void Cache::update(uint32_t address, OPERATION op) {
             l1.updateByLRU(address);
             l1.updateDirty(address, true);
             l2.updateByLRU(address);
-            if (L1Removed != -1 and l2.snoop(L1Removed)){
-                l2.updateDirty(L1Removed, true);
-                l2.updateByLRU(L1Removed);
-            }
+//            if (L1Removed != -1 and l2.snoop(L1Removed)){
+//                l2.updateDirty(L1Removed, true);
+//                l2.updateByLRU(L1Removed);
+//            }
         }
         else
             return; //writen only to mem
