@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
     Cache cache = Cache(MemCyc,BSize, WrAlloc, L1Size, L1Assoc, L1Cyc, L2Size, L2Assoc, L2Cyc);
 	int lineNum = 1;//todo: debug
 	while (getline(file, line)) {
-        if(lineNum == 11) //todo:debug
+        if(lineNum == 22) //todo:debug
             int debug = 0;
 		stringstream ss(line);
 		string address;

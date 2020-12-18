@@ -111,6 +111,7 @@ void CacheHierarchy::updateByLRU(uint32_t address){
             Entry entry = Entry(*it);
             temp->erase(it);
             temp->push_front(entry);
+            return;
         }
     }
 }
