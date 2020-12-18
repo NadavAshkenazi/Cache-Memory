@@ -63,9 +63,9 @@ int main(int argc, char **argv) {
 		}
 	}
     Cache cache = Cache(MemCyc,BSize, WrAlloc, L1Size, L1Assoc, L1Cyc, L2Size, L2Assoc, L2Cyc);
-	int lineNum = 0;//todo: debug
+	int lineNum = 1;//todo: debug
 	while (getline(file, line)) {
-        if(lineNum == 4) //todo:debug
+        if(lineNum == 11) //todo:debug
             int debug = 0;
 		stringstream ss(line);
 		string address;
@@ -89,8 +89,10 @@ int main(int argc, char **argv) {
 
 //		// todo: DEBUG - remove this line
 //		cout << " (dec) " << num << endl;
-
-		cache.update(num, OPERATION(operation));
+        OPERATION op = READ;
+        if (operation == 'w')
+            op = WRITE;
+		cache.update(num, OPERATION(op));
         lineNum++;
 	}
 
