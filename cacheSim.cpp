@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
     Cache cache = Cache(MemCyc,BSize, WrAlloc, L1Size, L1Assoc, L1Cyc, L2Size, L2Assoc, L2Cyc);
 	int lineNum = 1;//todo: debug
 	while (getline(file, line)) {
-        if(lineNum == 22) //todo:debug
+        if(lineNum == 37) //todo:debug
             int debug = 0;
 		stringstream ss(line);
 		string address;
@@ -77,18 +77,18 @@ int main(int argc, char **argv) {
 		}
 
 //		// todo: DEBUG - remove this line
-//		cout << "operation: " << operation;
+		cout << "operation: " << operation;
 
 		string cutAddress = address.substr(2); // Removing the "0x" part of the address
 
 //		// todo: DEBUG - remove this line
-//		cout << ", address (hex)" << cutAddress;
+		cout << ", address (hex)" << cutAddress;
 
 		unsigned long int num = 0;
 		num = strtoul(cutAddress.c_str(), NULL, 16);
 
 //		// todo: DEBUG - remove this line
-//		cout << " (dec) " << num << endl;
+		cout << " (dec) " << num << endl;
         OPERATION op = READ;
         if (operation == 'w')
             op = WRITE;

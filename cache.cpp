@@ -90,7 +90,7 @@ bool CacheHierarchy::snoop(uint32_t address){
 
     list<Entry> temp = L[getSet(address, numOfSetBits, bSize)];
     std::list<Entry>::iterator it;
-    for (it = temp.begin(); it != temp.end(); it++){
+    for (it = temp.begin(); it != temp.end(); ++it){
         if (getTag(address, numOfSetBits, bSize) == getTag(it->address, numOfSetBits, bSize))
             return true;
     }
@@ -106,7 +106,7 @@ void CacheHierarchy::add(uint32_t address){
 void CacheHierarchy::updateByLRU(uint32_t address){
     list<Entry>* temp = &L[getSet(address, numOfSetBits, bSize)];
     std::list<Entry>::iterator it;
-    for (it = temp->begin(); it != temp->end(); it++){
+    for (it = temp->begin(); it != temp->end(); ++it){
         if (getTag(address, numOfSetBits, bSize) == getTag(it->address, numOfSetBits, bSize)){
             Entry entry = Entry(*it);
             temp->erase(it);
@@ -119,7 +119,7 @@ void CacheHierarchy::updateByLRU(uint32_t address){
 Entry* CacheHierarchy::remove(uint32_t address){
     list<Entry>* temp = &L[getSet(address, numOfSetBits, bSize)];
     std::list<Entry>::iterator it;
-    for (it = temp->begin(); it != temp->end(); it++){
+    for (it = temp->begin(); it != temp->end(); ++it){
         if (getTag(address,numOfSetBits,bSize) == getTag(it->address, numOfSetBits, bSize)){
             Entry* entry = new Entry(*it);
             temp->erase(it);
@@ -150,7 +150,7 @@ bool CacheHierarchy::isSetFull(uint32_t address) {
 void CacheHierarchy::updateDirty(uint32_t address, bool isDirty) {
     list<Entry>* temp = &L[getSet(address, numOfSetBits, bSize)];
     std::list<Entry>::iterator it;
-    for (it = temp->begin(); it != temp->end(); it++){
+    for (it = temp->begin(); it != temp->end(); ++it){
         if (getTag(address, numOfSetBits, bSize) == getTag(it->address, numOfSetBits, bSize)){
             it->dirtyBit = isDirty;
         }
@@ -205,7 +205,8 @@ void Cache::update(uint32_t address, OPERATION op) {
     HIERARCHY location = this->inCache(address);
     if(location == L1) {
         l1.updateByLRU(address);
-        l1.updateDirty(address, true);
+        if (op == WRITE)
+            l1.updateDirty(address, true);
     }
     else if (location == L2){
         l1Misses++;
@@ -241,6 +242,7 @@ void Cache::addToL1(uint32_t address, OPERATION op){
             Entry l1Remove = *l1.removeLast(address);
             if (l1Remove.dirtyBit){
                 l2.updateDirty(l1Remove.address, true);
+                l2.updateByLRU(l1Remove.address);
             }
         }
         l1.add(address);
