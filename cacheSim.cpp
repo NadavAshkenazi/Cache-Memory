@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "Cache.cpp"
+#include "cache.cpp"
 
 using std::FILE;
 using std::string;
@@ -63,8 +63,10 @@ int main(int argc, char **argv) {
 		}
 	}
     Cache cache = Cache(MemCyc,BSize, WrAlloc, L1Size, L1Assoc, L1Cyc, L2Size, L2Assoc, L2Cyc);
+	int lineNum = 0;//todo: debug
 	while (getline(file, line)) {
-
+        if(lineNum == 4) //todo:debug
+            int debug = 0;
 		stringstream ss(line);
 		string address;
 		char operation = 0; // read (R) or write (W)
@@ -74,26 +76,27 @@ int main(int argc, char **argv) {
 			return 0;
 		}
 
-		// todo: DEBUG - remove this line
-		cout << "operation: " << operation;
+//		// todo: DEBUG - remove this line
+//		cout << "operation: " << operation;
 
 		string cutAddress = address.substr(2); // Removing the "0x" part of the address
 
-		// todo: DEBUG - remove this line
-		cout << ", address (hex)" << cutAddress;
+//		// todo: DEBUG - remove this line
+//		cout << ", address (hex)" << cutAddress;
 
 		unsigned long int num = 0;
 		num = strtoul(cutAddress.c_str(), NULL, 16);
 
-		// todo: DEBUG - remove this line
-		cout << " (dec) " << num << endl;
+//		// todo: DEBUG - remove this line
+//		cout << " (dec) " << num << endl;
 
 		cache.update(num, OPERATION(operation));
+        lineNum++;
 	}
 
 	double L1MissRate = cache.getL1MissRate();
 	double L2MissRate = cache.getL2MissRate();;
-	double avgAccTime;
+	double avgAccTime = cache.accTimeAVG();
 
 	printf("L1miss=%.03f ", L1MissRate);
 	printf("L2miss=%.03f ", L2MissRate);

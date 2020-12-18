@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/Cache.cpp
+/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cache.cpp
 map
 -
 math.h
@@ -33,6 +33,6 @@ fstream
 -
 sstream
 -
-Cache.cpp
-/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/Cache.cpp
+cache.cpp
+/mnt/c/Users/nadav ashkenazi/OneDrive - Technion/Technion/semester_6/Computer Architecture/hw/hw2/ca_hw2/cache.cpp
 
