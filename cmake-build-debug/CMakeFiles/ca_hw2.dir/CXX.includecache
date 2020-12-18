@@ -13,10 +13,6 @@ math.h
 -
 vector
 -
-string
--
-map
--
 stdio.h
 -
 iostream

@@ -5,8 +5,6 @@
 #include <map>
 #include <math.h>
 #include <vector>
-#include <string>
-#include <map>
 #include <stdio.h>
 #include <iostream>
 #include "list"
@@ -23,6 +21,7 @@ unsigned int getTag(uint32_t address, int numOfSetBits, int bSize){
         mask += 1;
     }
     uint32_t res = address & (~mask);
+//    cout << "numOfBits " << numOfSetBits << " address: " << address << " tag: " << res << endl; //todo: debug
     return res;
 }
 
@@ -201,6 +200,7 @@ HIERARCHY Cache::inCache(uint32_t address){
 }
 
 void Cache::update(uint32_t address, OPERATION op) {
+//    cout << "address: " << address << " l2 tag: " << (getTag(address, l2.numOfSetBits, bSize) >> (l2.numOfSetBits+bSize)) << endl; //todo: debug
     l1accesses++;
     HIERARCHY location = this->inCache(address);
     if(location == L1) {
@@ -213,12 +213,13 @@ void Cache::update(uint32_t address, OPERATION op) {
         if (op == READ || this->wrAllocate) {
             uint32_t L1Removed = addToL1(address, op);
             l1.updateByLRU(address);
-            l1.updateDirty(address, true);
+            if (op == WRITE)
+                l1.updateDirty(address, true);
             l2.updateByLRU(address);
-//            if (L1Removed != -1 and l2.snoop(L1Removed)){
-//                l2.updateDirty(L1Removed, true);
-//                l2.updateByLRU(L1Removed);
-//            }
+            if (L1Removed != -1 and l2.snoop(L1Removed)){
+                l2.updateDirty(L1Removed, true);
+                l2.updateByLRU(L1Removed);
+            }
         }
         else{  // op == WRITE with no Write Allocate
             l2.updateByLRU(address);
@@ -232,12 +233,13 @@ void Cache::update(uint32_t address, OPERATION op) {
             addToL2(address, op);
             uint32_t L1Removed = addToL1(address, op);
             l1.updateByLRU(address);
-            l1.updateDirty(address, true);
+            if (op == WRITE)
+                l1.updateDirty(address, true);
             l2.updateByLRU(address);
-//            if (L1Removed != -1 and l2.snoop(L1Removed)){
-//                l2.updateDirty(L1Removed, true);
-//                l2.updateByLRU(L1Removed);
-//            }
+            if (L1Removed != -1 and l2.snoop(L1Removed)){
+                l2.updateDirty(L1Removed, true);
+                l2.updateByLRU(L1Removed);
+            }
         }
         else
             return; //writen only to mem
