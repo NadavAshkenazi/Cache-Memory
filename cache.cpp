@@ -14,6 +14,14 @@ using namespace std;
 enum HIERARCHY {L1, L2, MEM};
 enum OPERATION {READ, WRITE};
 
+/**
+ * returns the tag which is the bits from #(blockBits + setBits) until the end  where every bit not
+ * used for tag 0;
+ * @param address - address to extract tag from
+ * @param numOfSetBits - number of bit used for deciding set
+ * @param bSize -block size
+ * @return the relevant tag
+ */
 unsigned int getTag(uint32_t address, int numOfSetBits, int bSize){
     uint32_t mask = 0;
     for (int i = 0; i < numOfSetBits + bSize; i++){
@@ -25,7 +33,14 @@ unsigned int getTag(uint32_t address, int numOfSetBits, int bSize){
     return res;
 }
 
-
+/**
+ * returns the set which is the bits from #(blockBits) until #(blockBits+setBits) as a 32 bit address where every bit not
+ * used for set is 0;
+ * @param address -address to extract set from
+ * @param numOfSetBits - number of bit used for deciding set
+ * @param bSize -block size
+ * @return the relevant set
+ */
 unsigned int getSet(uint32_t address, int numOfSetBits, int bSize){
     uint32_t mask = 0;
     for (int i = 0; i < numOfSetBits; i++){
@@ -39,7 +54,14 @@ unsigned int getSet(uint32_t address, int numOfSetBits, int bSize){
     return res;
 }
 
-unsigned int getOffset(uint32_t address, int numOfSetBits, int bSize){
+/**
+ * returns the offset which is the bits from the start until #(blockBits) as a 32 bit address where every bit not
+ * used for offset is 0;
+ * @param address -address to extract set from
+ * @param bSize -block size
+ * @return the relevant set
+ */
+unsigned int getOffset(uint32_t address, int bSize){
     uint32_t mask = 0;
 
     for (int i = 0; i < bSize; i++){
@@ -49,7 +71,9 @@ unsigned int getOffset(uint32_t address, int numOfSetBits, int bSize){
     return address & mask;
 }
 
-
+/**
+ * a Class that hold the relevant data for an entry inside the cache
+ */
 class Entry{
 public:
     const uint32_t address;
@@ -59,9 +83,9 @@ public:
 };
 
 
-
-
-
+/**
+ * a Class that represents a single hierarchy inside the cache memory such as L1 or L2
+ */
 class CacheHierarchy{
 public:
     const unsigned int numOfSetBits;
@@ -85,6 +109,11 @@ public:
     void updateDirty(uint32_t address, bool isDirty);
 };
 
+/**
+ * Checks if the data in address is in the cache hierarchy
+ * @param address for check
+ * @return true if the data is inside the cache hierarchy and false otherwise
+ */
 bool CacheHierarchy::snoop(uint32_t address){
 
     list<Entry> temp = L[getSet(address, numOfSetBits, bSize)];
@@ -96,12 +125,19 @@ bool CacheHierarchy::snoop(uint32_t address){
     return false;
 }
 
+/**
+ * adds the block holding address to the cache hierarchy
+ * @param address to add to cache
+ */
 void CacheHierarchy::add(uint32_t address){
     Entry entry = Entry(address);
     L[getSet(address, numOfSetBits, bSize)].push_front(entry);
 }
 
-
+/**
+ * updates the cache hierarchies LRU order to reflect that address was used last
+ * @param address most recently used
+ */
 void CacheHierarchy::updateByLRU(uint32_t address){
     list<Entry>* temp = &L[getSet(address, numOfSetBits, bSize)];
     std::list<Entry>::iterator it;
@@ -115,6 +151,11 @@ void CacheHierarchy::updateByLRU(uint32_t address){
     }
 }
 
+/**
+ * removes the entry that holds the block relevant to address from cache hierarchy
+ * @param address for removal
+ * @return pointer to the entry that was removed
+ */
 Entry* CacheHierarchy::remove(uint32_t address){
     list<Entry>* temp = &L[getSet(address, numOfSetBits, bSize)];
     std::list<Entry>::iterator it;
@@ -128,6 +169,11 @@ Entry* CacheHierarchy::remove(uint32_t address){
     return NULL;
 }
 
+/**
+ * removes the last block in the LRU order In a relevant set.
+ * @param address to decide which set needs removing from.
+ * @return pointer to the entry that was removed
+ */
 Entry* CacheHierarchy::removeLast(uint32_t address) {
     list<Entry>* temp = &L[getSet(address, numOfSetBits, bSize)];
     std::list<Entry>::iterator lastElement = temp->end();
@@ -137,6 +183,11 @@ Entry* CacheHierarchy::removeLast(uint32_t address) {
     return entry;
 }
 
+/**
+ * checks if a relevant set is in capacity
+ * @param address to decide which set needs checking.
+ * @return true if set is full and false otherwise
+ */
 bool CacheHierarchy::isSetFull(uint32_t address) {
     int waysNum = pow(2,lAssoc);
     if (L[getSet(address, numOfSetBits, bSize)].size() > waysNum)
@@ -146,6 +197,11 @@ bool CacheHierarchy::isSetFull(uint32_t address) {
     return false;
 }
 
+/**
+ * changes the dirty bit of a given block to a given state
+ * @param address to decide the block
+ * @param isDirty wanted state
+ */
 void CacheHierarchy::updateDirty(uint32_t address, bool isDirty) {
     list<Entry>* temp = &L[getSet(address, numOfSetBits, bSize)];
     std::list<Entry>::iterator it;
@@ -157,7 +213,9 @@ void CacheHierarchy::updateDirty(uint32_t address, bool isDirty) {
 }
 
 
-
+/**
+ * a Class that represents an entire cache memory
+ */
 class Cache{
 public:
     int memCyc;
@@ -191,6 +249,11 @@ public:
     }
 };
 
+/**
+ * checks if the data in a given address is kept in the cache memory
+ * @param address for checking
+ * @return true if a block holding the data is in the cache memory false otherwise
+ */
 HIERARCHY Cache::inCache(uint32_t address){
     if (this->l1.snoop(address))
         return L1;
@@ -199,6 +262,11 @@ HIERARCHY Cache::inCache(uint32_t address){
     return MEM;
 }
 
+/**
+ * updates the cache to hold a specific block by LRU order
+ * @param address to dicide which block need keeping
+ * @param op operation that was preformed on the block
+ */
 void Cache::update(uint32_t address, OPERATION op) {
 //    cout << "address: " << address << " l2 tag: " << (getTag(address, l2.numOfSetBits, bSize) >> (l2.numOfSetBits+bSize)) << endl; //todo: debug
     l1accesses++;
@@ -246,6 +314,12 @@ void Cache::update(uint32_t address, OPERATION op) {
     }
 }
 
+/**
+ * adds a specific block to L1, and removes the LRU block if necessary
+ * @param address to decide which block needs to be added
+ * @param op that was preformed on the address
+ * @return a the address of the removed entry if there was one, -1 otherwise
+ */
 uint32_t Cache::addToL1(uint32_t address, OPERATION op){
     uint32_t retAdr = -1;
     if (op == READ || wrAllocate){
@@ -265,6 +339,12 @@ uint32_t Cache::addToL1(uint32_t address, OPERATION op){
         return -1; //writen only to mem
 }
 
+
+/**
+ * adds a specific block to L2, and removes the LRU block if necessary
+ * @param address to decide which block needs to be added
+ * @param op that was preformed on the address
+ */
 void Cache::addToL2(uint32_t address, OPERATION op){
     if (op == READ || wrAllocate){
         if (l2.isSetFull(address)){
