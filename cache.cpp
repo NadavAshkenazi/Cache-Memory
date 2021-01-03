@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "list"
+#include <stdint.h>
 
 using namespace std;
 
@@ -17,7 +18,7 @@ enum OPERATION {READ, WRITE};
 /**
  * returns the tag which is the bits from #(blockBits + setBits) until the end  where every bit not
  * used for tag 0;
- * @param address - address to extract tag from
+ * @param address - address to extract tag
  * @param numOfSetBits - number of bit used for deciding set
  * @param bSize -block size
  * @return the relevant tag
@@ -29,7 +30,6 @@ unsigned int getTag(uint32_t address, int numOfSetBits, int bSize){
         mask += 1;
     }
     uint32_t res = address & (~mask);
-//    cout << "numOfBits " << numOfSetBits << " address: " << address << " tag: " << res << endl; //todo: debug
     return res;
 }
 
@@ -92,13 +92,13 @@ public:
     const unsigned int lAssoc;
     const unsigned int lCyc;
     const unsigned int bSize;
-    map<int,list<Entry>> L;
+    map<int,list<Entry> > L;
     CacheHierarchy(unsigned int lSize = 0, unsigned int lAssoc =0, unsigned int lCyc = 0, unsigned int bSize =0) :
             numOfSetBits(lSize - bSize - lAssoc),
             lAssoc(lAssoc),
             lCyc(lCyc),
             bSize(bSize){
-        this->L = map<int,list<Entry>>();
+        this->L = map<int,list<Entry> >();
     }
     bool snoop(uint32_t address);
     void add(uint32_t address);
@@ -268,7 +268,6 @@ HIERARCHY Cache::inCache(uint32_t address){
  * @param op operation that was preformed on the block
  */
 void Cache::update(uint32_t address, OPERATION op) {
-//    cout << "address: " << address << " l2 tag: " << (getTag(address, l2.numOfSetBits, bSize) >> (l2.numOfSetBits+bSize)) << endl; //todo: debug
     l1accesses++;
     HIERARCHY location = this->inCache(address);
     if(location == L1) {
